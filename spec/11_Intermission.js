@@ -20,12 +20,12 @@ describe("Intermission", function() {
     //   * Comma separating City and State is optional
     //   * US State will always use two uppercase letter abbreviation
     
-    var fixThisPattern = /___/;
+    var fixThisPattern = /^ (.*?),? ([A-Z]{2}) (\d{5}(-\d{4})?)$/;
     
     // in matches1[cityGroup], etc., set the index to find each value
-    var cityGroup  = ___;
-    var stateGroup = ___;
-    var zipGroup   = ___;
+    var cityGroup  = 1;
+    var stateGroup = 2;
+    var zipGroup   = 3;
     
     var matches1 = fixThisPattern.exec(' Columbus, OH 43215'           );
     var matches2 = fixThisPattern.exec(' San Francisco, CA 94118-4503' );
@@ -79,14 +79,14 @@ describe("Intermission", function() {
     //   * GET parameters are optional
     //   * any missing value will be "" (instead of null)
     
-    var fixThisPattern = /^(http)(:)/;
+    var fixThisPattern = /^(https?|s?ftp|ssh):\/\/([\w.]*)(:\d*)?\/([\w\/]*\/)?([\w.]*)?(\?q=[\w+]*)?$/;
     
-    var protocolGroup  = ___;
-    var serverGroup    = ___;
-    var portGroup      = ___;
-    var directoryGroup = ___;
-    var fileGroup      = ___;
-    var getParamsGroup = ___;
+    var protocolGroup  = 1;
+    var serverGroup    = 2;
+    var portGroup      = 3;
+    var directoryGroup = 4;
+    var fileGroup      = 5;
+    var getParamsGroup = 6;
     
     // valid
     var matches1 = fixThisPattern.exec( 'http://www.google.com/'                                );
@@ -102,41 +102,41 @@ describe("Intermission", function() {
     // Debug:
     // jasmine.log("Debug: " + matches1);
 
-    var protocol1   = matches1.length > protocolGroup  ? matches1[protocolGroup]  : "";
-    var server1     = matches1.length > serverGroup    ? matches1[serverGroup]    : "";
-    var port1       = matches1.length > portGroup      ? matches1[portGroup]      : "";
-    var directory1  = matches1.length > directoryGroup ? matches1[directoryGroup] : "";
-    var file1       = matches1.length > fileGroup      ? matches1[fileGroup]      : "";
-    var getParams1  = matches1.length > getParamsGroup ? matches1[getParamsGroup] : "";
-    
-    var protocol2   = matches2.length > protocolGroup  ? matches2[protocolGroup]  : "";
-    var server2     = matches2.length > serverGroup    ? matches2[serverGroup]    : "";
-    var port2       = matches2.length > portGroup      ? matches2[portGroup]      : "";
-    var directory2  = matches2.length > directoryGroup ? matches2[directoryGroup] : "";
-    var file2       = matches2.length > fileGroup      ? matches2[fileGroup]      : "";
-    var getParams2  = matches2.length > getParamsGroup ? matches2[getParamsGroup] : "";
-    
-    var protocol3   = matches3.length > protocolGroup  ? matches3[protocolGroup]  : "";
-    var server3     = matches3.length > serverGroup    ? matches3[serverGroup]    : "";
-    var port3       = matches3.length > portGroup      ? matches3[portGroup]      : "";
-    var directory3  = matches3.length > directoryGroup ? matches3[directoryGroup] : "";
-    var file3       = matches3.length > fileGroup      ? matches3[fileGroup]      : "";
-    var getParams3  = matches3.length > getParamsGroup ? matches3[getParamsGroup] : "";
-    
-    var protocol4   = matches4.length > protocolGroup  ? matches4[protocolGroup]  : "";
-    var server4     = matches4.length > serverGroup    ? matches4[serverGroup]    : "";
-    var port4       = matches4.length > portGroup      ? matches4[portGroup]      : "";
-    var directory4  = matches4.length > directoryGroup ? matches4[directoryGroup] : "";
-    var file4       = matches4.length > fileGroup      ? matches4[fileGroup]      : "";
-    var getParams4  = matches4.length > getParamsGroup ? matches4[getParamsGroup] : "";
-    
-    var protocol5   = matches5.length > protocolGroup  ? matches5[protocolGroup]  : "";
-    var server5     = matches5.length > serverGroup    ? matches5[serverGroup]    : "";
-    var port5       = matches5.length > portGroup      ? matches5[portGroup]      : "";
-    var directory5  = matches5.length > directoryGroup ? matches5[directoryGroup] : "";
-    var file5       = matches5.length > fileGroup      ? matches5[fileGroup]      : "";
-    var getParams5  = matches5.length > getParamsGroup ? matches5[getParamsGroup] : "";
-    
+    var protocol1   = matches1[protocolGroup] || "";
+    var server1     = matches1[serverGroup] || "";
+    var port1       = matches1[portGroup] || "";
+    var directory1  = matches1[directoryGroup] || "";
+    var file1       = matches1[fileGroup] || "";
+    var getParams1  = matches1[getParamsGroup] || "";
+	
+    var protocol2   = matches2[protocolGroup] || "";
+    var server2     = matches2[serverGroup] || "";
+    var port2       = matches2[portGroup] || "";
+    var directory2  = matches2[directoryGroup] || "";
+    var file2       = matches2[fileGroup] || "";
+    var getParams2  = matches2[getParamsGroup] || "";
+	
+    var protocol3   = matches3[protocolGroup] || "";
+    var server3     = matches3[serverGroup] || "";
+    var port3       = matches3[portGroup] || "";
+    var directory3  = matches3[directoryGroup] || "";
+    var file3       = matches3[fileGroup] || "";
+    var getParams3  = matches3[getParamsGroup] || "";
+	
+    var protocol4   = matches4[protocolGroup] || "";
+    var server4     = matches4[serverGroup] || "";
+    var port4       = matches4[portGroup] || "";
+    var directory4  = matches4[directoryGroup] || "";
+    var file4       = matches4[fileGroup] || "";
+    var getParams4  = matches4[getParamsGroup] || "";
+	
+    var protocol5   = matches5[protocolGroup] || "";
+    var server5     = matches5[serverGroup] || "";
+    var port5       = matches5[portGroup] || "";
+    var directory5  = matches5[directoryGroup] || "";
+    var file5       = matches5[fileGroup] || "";
+    var getParams5  = matches5[getParamsGroup] || "";
+	
     // http://www.google.com/
     expect( protocol1  ).toEqual('http');
     expect( server1    ).toEqual('www.google.com');

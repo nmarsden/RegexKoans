@@ -40,11 +40,12 @@ describe("Looking Ahead", function() {
     var str2 = 'The other brown fox was from Qatar.';
     
     var lookaheadPattern = /q(?=u)/;
-    
-    expect( str1 ).toEqual(lookaheadPattern);
-    expect( str2 ).not.toEqual(lookaheadPattern);
-    
-    expect(1).toEqual(2); // remove this line to pass
+	
+    var matches1 = lookaheadPattern.exec(str1);
+    var matches2 = lookaheadPattern.exec(str2);
+	
+    expect( matches1[0] ).toEqual("q");
+    expect( matches2 ).toBeNull();
   });
   
   // The Koan above could easily be matched with a pattern without any lookahead
@@ -62,26 +63,26 @@ describe("Looking Ahead", function() {
   // we'll get to later.
   
   it('verify that the string contains at least one uppercase letter and one number', function() {
-    var str1 = 'abcde';
-    var str2 = 'a6cD';
-    var str3 = 'Abcd9';
-    var str4 = '12345';
-    
-    var fixThisPattern = /___/;
+    var fixThisPattern = /(?=.*[A-Z])(?=.*[0-9]).*/;
     
     // Hint: Just like any other Regex element, the lookahead element is position-
     // specific. See the "qu" example above: the "u" must be present in exactly
     // the position after the "q". To make the lookahead scan ahead farther into
     // the string, you'll have to incorporate a .*
     
-    expect( 'abcde' ).not.toEqual(fixThisPattern);
-    
-    expect( 'a6cD'  ).toEqual(fixThisPattern);
-    expect( 'Abcd9' ).toEqual(fixThisPattern);
-    expect( 'X3'    ).toEqual(fixThisPattern);
-    
-    expect( ''      ).not.toEqual(fixThisPattern);
-    expect( '12345' ).not.toEqual(fixThisPattern);
+	var matches1 = fixThisPattern.exec('abcde');
+	var matches2 = fixThisPattern.exec('a6cD');
+	var matches3 = fixThisPattern.exec('Abcd9');
+	var matches4 = fixThisPattern.exec('X3');
+	var matches5 = fixThisPattern.exec('');
+	var matches6 = fixThisPattern.exec('12345');
+	
+	expect( matches1 ).toBeNull();
+	expect( matches2[0] ).toEqual('a6cD');
+	expect( matches3[0] ).toEqual('Abcd9');
+	expect( matches4[0] ).toEqual('X3');
+	expect( matches5 ).toBeNull();
+	expect( matches6 ).toBeNull();
   });
   
   it('validate a password', function() {
@@ -92,15 +93,23 @@ describe("Looking Ahead", function() {
     //   * Must be between 6 and 16 characters long
     //   * Any non-whitespace character is allowed
     
-    var fixThisPattern = /___/;
-    
-    expect( 'abcXYZ123'        ).toEqual(fixThisPattern);
-    expect( '89ghV.'           ).toEqual(fixThisPattern);
-    expect( 'X0aaaaaaaaaaaaaa' ).toEqual(fixThisPattern);
-    expect( 'abc123'            ).not.toEqual(fixThisPattern);
-    expect( 'aX5##'             ).not.toEqual(fixThisPattern);
-    expect( 'abc123XXXXXXXXXXX' ).not.toEqual(fixThisPattern);
-    expect( 'abc123 ZZ'         ).not.toEqual(fixThisPattern);
+    var fixThisPattern = /(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[0-9])(?=^\S{6,16}$)\S*/;
+	
+    var matches1 = fixThisPattern.exec('abcXYZ123');
+    var matches2 = fixThisPattern.exec('89ghV.' );
+    var matches3 = fixThisPattern.exec('X0aaaaaaaaaaaaaa');
+	var matches4 = fixThisPattern.exec('abc123');
+	var matches5 = fixThisPattern.exec('aX5##');
+	var matches6 = fixThisPattern.exec('abc123XXXXXXXXXXX');
+	var matches7 = fixThisPattern.exec('abc123 ZZ');
+	
+	expect( matches1[0] ).toEqual('abcXYZ123');
+	expect( matches2[0] ).toEqual('89ghV.');
+	expect( matches3[0] ).toEqual('X0aaaaaaaaaaaaaa');
+	expect( matches4 ).toBeNull();
+	expect( matches5 ).toBeNull();
+	expect( matches6 ).toBeNull();
+	expect( matches7 ).toBeNull();
   });
   
   // You can combine lookahead with group captures to solve more interesting
@@ -113,10 +122,10 @@ describe("Looking Ahead", function() {
   it('find the id of every IMG tag without an "alt" attribute', function() {
     // Assume every IMG tag has an id defined
     
-    var fixThisPattern = /___/;
-    var idGroupIdx = ___;
+    var fixThisPattern = /(?!.*alt="[^"]*")id="([^"]*)"/;
+    var idGroupIdx = 1;
     
-    var matcher1 = fixThisPattern.exec( '<img src="pic.jpg" id="my_pic"/>'                        );
+    var matches1 = fixThisPattern.exec( '<img src="pic.jpg" id="my_pic"/>'                        );
     var matches2 = fixThisPattern.exec( '<img src="http://localhost/somepic.gif" id="localPic"/>' );
     var matches3 = fixThisPattern.exec( '<img src="mypic.png" id="hasTitle" alt="My Pic!"/>'      );
     
@@ -132,8 +141,8 @@ describe("Looking Ahead", function() {
     //   * If & is already part of an &...; escape sequence, don't escape it
     //   * & escape sequences are always &, followed by some number of letters, then ;
     
-    var fixThisPattern = /___/;
-    var escaped = '___';
+    var fixThisPattern = /(?!&[a-z]*;)(&)/g;
+    var escaped = '&amp;';
     
     var str1 = 'Strunk & White'.replace(fixThisPattern, escaped);
     var str2 = 'This &amp; is already escaped.'.replace(fixThisPattern, escaped);
@@ -155,8 +164,8 @@ describe("Looking Ahead", function() {
     
     // Hint: You will need to use $n references to capture groups to solve this
     
-    var fixThisPattern = /___/;
-    var replacementString = '___';
+    var fixThisPattern = /(?!<.*?alt="[^"]*".*?\/>)(<img )(src="([^"]*)".*)/;
+    var replacementString = '$1alt="$3" $2';
     
     var str1 = '<img src="pic.jpg"/>'.replace(fixThisPattern, replacementString);
     var str2 = '<img src="trickyPic.jpg"/> src="Not it!" alt="Tricky!"'.replace(fixThisPattern, replacementString);

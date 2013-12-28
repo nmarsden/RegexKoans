@@ -16,7 +16,7 @@ describe("Modifiers", function() {
     // to the language API to see how to make a case-insensitive match
     // in your language.
     
-    var fixThisPattern = /^abc$/;
+    var fixThisPattern = /^abc$/i;
     
     expect( 'abc' ).toMatch(fixThisPattern);
     expect( 'ABC' ).toMatch(fixThisPattern);
@@ -39,8 +39,8 @@ describe("Modifiers", function() {
     var singleMatch = /x/;
     var globalMatch = /x/g;
 
-    expect( "xxx".match(singleMatch).length ).toEqual(___);
-    expect( "xxx".match(globalMatch).length ).toEqual(___);
+    expect( "xxx".match(singleMatch).length ).toEqual(1);
+    expect( "xxx".match(globalMatch).length ).toEqual(3);
   });
 
   it('treat string as multiple lines', function() {
@@ -49,15 +49,15 @@ describe("Modifiers", function() {
     // by line feed. ^ and $ match intermediate
     // "lines" within input string
     
-    var fixThisPattern = /^.*$/;
+    var fixThisPattern = /^\w\w\w$/mg;
     
     var matches = "abc\nxyz".match(fixThisPattern);
     
     expect( 'abc\nxyz' ).toMatch(fixThisPattern);
     
     expect( matches.length ).toEqual(2);
-    expect( matches[0]     ).toEqual("___");
-    expect( matches[1]     ).toEqual("___");
+    expect( matches[0]     ).toEqual("abc");
+    expect( matches[1]     ).toEqual("xyz");
     
     expect(fixThisPattern.source).not.toMatch(/n/);
   });
